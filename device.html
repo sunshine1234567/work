@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>幼儿安全健康管理</title>
+    <link rel="Shortcut Icon" href="img/logo.png">
+    <link rel="stylesheet" href="css/style.css" type="text/css">
+    <link rel="stylesheet" href="css/left.css" type="text/css">
+    <link rel="stylesheet" href="css/nav.css" type="text/css">
+    <link rel="stylesheet" href="css/gatawaylist.css" type="text/css">
+    <link type="text/css" rel="stylesheet" href="css/layer.css" id="skinlayercss">
+    <link rel="stylesheet" href="css/dialog.css" type="text/css">
+    <link rel="stylesheet" href="css/twitter.css" type="text/css">
+
+    <!--js区-->
+    <script src="./js/jquery-1.7.1.min.js"></script>
+    <script type="text/javascript" src="js/jquery.shove-1.0.js"></script>
+    <script type="text/javascript" src="js/layer.min.js"></script>
+    <script type="text/javascript" src="js/msg.js"></script>
+    <script charset="utf-8" src="js/jquery.form.js"></script>
+    <script src="./js/md5.js"></script>
+    <script src="./js/lib/avalon.js"></script>
+    <script src="./js/lib/common.js"></script>
+    <script type="text/javascript" src="js/jquery.artDialog.source.js"></script>
+    <script type="text/javascript" src="js/iframeTools.js"></script>
+    <script type="text/javascript" src="js/page/device.js"></script>
+    <script src="js/lib/laydate/laydate.js"></script>
+
+    <style>
+        .ms-controller, .ms-important, [ms-controller], [ms-important] {
+            visibility: hidden;
+        }
+        .show{
+            display: table!important;
+        }
+        .block{
+            display: block!important;
+        }
+    </style>
+</head>
+
+<body ms-controller="deviceVm">
+<div class="baby_content">
+    <!--头部-->
+    <div ms-include-src=" './component/banner.html'"></div>
+    <!--子导航栏-->
+    <div class="baby_conter_cd">
+        <div class="baby_conter_left">
+            <div class="baby_conter_li">
+                <a ms-class="baby_conter_school:curPage == 'device' "      ms-click="router('device')"><img src="img/buttom.png">设备组管理</a>
+                <a ms-class="baby_conter_school:curPage == 'ruler'  "      ms-click="router('ruler')"><img src="img/buttom.png">身高尺管理</a>
+                <a ms-class="baby_conter_school:curPage == 'steelyard' "   ms-click="router('steelyard')"><img src="img/buttom.png">健康秤管理</a>
+            </div>
+            <div class="Copyright">
+                <div class="p">Powered by glorymi<br>深圳市伴小宝科技有限公司</div>
+            </div>
+        </div>
+
+
+        <div class="baby_conter_right">
+            <form>
+
+                <!--集团选择框-->
+                <div class="select" ms-if="curPage!='ring'&& weight==3">
+                    <span>集团：&nbsp;</span>
+                    <select  ms-duplex="tegr_id">
+                        <option ms-attr-value="{{el.tegr_id}}" ms-repeat="tegerList">{{el.tegr_name}}</option>
+                    </select>
+                </div>
+                <!--设备组数据-->
+                <div class="baby_content_tab"     style="display: none"  ms-class="show:curPage == 'device'"  ms-if="curPage == 'device' ">
+                    <ul class="baby_content_tab_menu">
+                        <li>选择</li>
+                        <li>设备组名称</li>
+                        <li>设备组老师</li>
+                        <li>创建时间</li>
+                        <li>操作</li>
+                    </ul>
+                    <!--数据-->
+                    <ul class="baby_content_tab_ul1 " ms-repeat="dataList" ms-class = "baby_content_tab_bg:$index%2!=0">
+                        <li class="baby_tab_checkbox_li"><input type="checkbox"  ms-attr-checked="el.check"  ms-click="checkOne(el)" /></li>
+                        <li>{{el.degr_name}}</li>
+                        <li>{{el.name}}</li>
+                        <li>{{el.create_time*1000 | date('yyyy-MM-dd') }}</li>
+                        <li >
+                            <a class="edit" href="javascript: void(0)"  ms-if="weight>=2" ms-click="open(el)">编辑</a>
+                            <a class="edit" ms-click="seeRing(el)" style="cursor: pointer">查看</a>
+                        </li>
+                    </ul>
+                </div>
+                <!--    &lt;!&ndash;手环组数据-->
+
+                <div class="user-main2" style="display: none" ms-class="block:curPage == 'ring'" ms-if="curPage == 'ring' ">
+                    <div class="user-title2">
+                        <a ms-click="router('device')" class="back">
+                            <img src="img/back.png" title="">
+                        </a>
+                        <h3>{{degrName}}</h3>
+                    </div>
+                </div>
+                <div class="baby_content_tab"  style="display: none"  ms-class="show:curPage == 'ring'"  ms-if="curPage == 'ring' ">
+                    <ul class="baby_content_tab_menu">
+                        <li>选择</li>
+                        <li>手环编号</li>
+                        <li>手环mac地址</li>
+                        <li>设备组名称</li>
+                        <li>操作</li>
+                    </ul>
+                    <!--数据-->
+                    <ul class="baby_content_tab_ul1 " ms-repeat="dataList" ms-class = "baby_content_tab_bg:$index%2!=0">
+                        <li class="baby_tab_checkbox_li"><input type="checkbox"    ms-attr-checked="el.check"   ms-click="checkOne(el)"/></li>
+                        <li>{{el.bracelet_no}}</li>
+                        <li>{{el.bracelet_address}}</li>
+                        <li>{{el.degr_name}}</li>
+                        <li><a class="edit" href="javascript: void(0)" ms-click="open(el)">编辑</a></li>
+                    </ul>
+                </div>
+                <!--&lt;!&ndash;身高尺数据&ndash;&gt;-->
+                <div class="baby_content_tab" style="display: none"  ms-class="show:curPage == 'ruler'"   ms-if="curPage =='ruler'">
+                    <ul class="baby_content_tab_menu">
+                        <li>选择</li>
+                        <li>身高尺编号</li>
+                        <li>身高尺mac地址</li>
+                        <li>身高尺负责人</li>
+                        <!--<li>负责人集团名称</li>-->
+                        <li>操作</li>
+                    </ul>
+                    <!--&lt;!&ndash;数据&ndash;&gt;-->
+                    <ul class="baby_content_tab_ul1 " ms-repeat="dataList" ms-class = "baby_content_tab_bg:$index%2!=0">
+                        <li class="baby_tab_checkbox_li"><input type="checkbox"   ms-attr-checked="el.check"  ms-click="checkOne(el)"/></li>
+                        <li>{{el.ruler_no}}</li>
+                        <li>{{el.ruler_addr}}</li>
+                        <li>{{el.name}}</li>
+                        <!--<li>{{el.tegr_name}}</li>-->
+                        <li><a class="edit" href="javascript: void(0)" ms-if="weight>=2" ms-click="open(el)">编辑</a></li>
+                    </ul>
+                </div>
+                <!--&lt;!&ndash;健康秤数据&ndash;&gt;-->
+                <div class="baby_content_tab" style="display: none"  ms-class="show:curPage == 'steelyard'"  ms-if="curPage =='steelyard'" >
+                    <ul class="baby_content_tab_menu">
+                        <li>选择</li>
+                        <li>健康秤编号</li>
+                        <li>健康秤mac地址</li>
+                        <li>健康秤负责人</li>
+                        <!--<li>负责人集团名称</li>-->
+                        <li>操作</li>
+                    </ul>
+                    <!--&lt;!&ndash;数据&ndash;&gt;-->
+                    <ul class="baby_content_tab_ul1 " ms-repeat="dataList" ms-class = "baby_content_tab_bg:$index%2!=0">
+                        <li class="baby_tab_checkbox_li"><input type="checkbox"    ms-attr-checked="el.check"  ms-click="checkOne(el)"/></li>
+                        <li>{{el.scales_no}}</li>
+                        <li>{{el.scales_addr}}</li>
+                        <li>{{el.name}}</li>
+                        <!--<li>{{el.tegr_name}}</li>-->
+                        <li><a class="edit" href="javascript: void(0)"  ms-if="weight>=2" ms-click="open(el)">编辑</a></li>
+                    </ul>
+                </div>
+            </form>
+
+
+
+            <div class="baby_content_dt" ms-if="weight>=2||curPage =='ring'">
+                <div class="baby_content_dt-1">
+                    <input type="checkbox" ms-attr-checked="checkAllFlag" ms-click="checkAll">
+                    <span style="cursor: pointer;" >全选</span>
+                    <span class="baby_content_del" ms-click="delPop">批量删除</span>
+                    <span class="baby_content_del edit" ms-click="open('')">添加</span>
+                </div>
+
+
+                <div class="baby_content_dt-2">
+                    <div class="baby_content_dt-2-fy">
+                        <!-- 分页首页按钮 -->
+                        <a href="javascript:void(0)" class="baby_content_span" ms-click="query(1)" ms-if="total!=1 && pageNo!=1">首页</a>
+                        <!-- 前一页按钮 -->
+                        <a href="javascript:void(0)" class="baby_content_span" ms-click="query(pageNo-1)" ms-if="pageNo>1"> &lt;&lt; 上一页</a>
+                        <!-- 下一页按钮 -->
+                        <a href="javascript:void(0)" class="baby_content_span" ms-click="query(pageNo+1)" ms-if="pageNo<total">下一页 &gt;&gt;</a>
+                        <!-- 分页尾页按钮 -->
+                        <a href="javascript:void(0)" class="baby_content_span" ms-click="query(total)" ms-if="total!=1 && pageNo!=total && total!=0">尾页</a>
+                    </div>
+                </div>
+
+
+                <!--设备组添加弹窗-->
+                <div class="shade"   ms-class="block:pop=='device' ">
+                    <div class="user-edit">
+                        <div class="user-main">
+                            <div class="user-title">
+                                <h3>设备组：</h3>
+                            </div>
+
+                            <table class="table_1" cellpadding="0" cellspacing="0">
+                                <tr ms-if="weight!=2">
+                                    <th width="40%">集团：</th>
+                                    <td width="60%">
+                                        <select  ms-duplex="addTegr">
+                                            <option ms-attr-value="{{el.tegr_id}}" ms-repeat="tegerList" >{{el.tegr_name | addFilter}}</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr >
+                                    <th width="40%">设备所属用户：</th>
+                                    <td width="60%">
+                                        <select  ms-duplex="addUser">
+                                            <option ms-attr-value="{{el.user_id}}" ms-repeat="userList">{{el.name}}</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr >
+                                    <th width="40%">设备组名称：</th>
+                                    <td width="60%"><input type="text"  ms-duplex="addName"/>
+                                    </td>
+                                </tr>
+                            </table>
+                            <div class="user-btn">
+                                <input type="button" value="保存" class="oper" ms-click="add"/>
+                                <input type="button" value="返回" class="oper" ms-click="close"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!--手环弹窗-->
+                <div class="shade"   ms-class="block:pop=='ring' ">
+                    <div class="user-edit">
+                        <div class="user-main">
+                            <div class="user-title">
+                                <h3>手环：</h3>
+                            </div>
+                            <table class="table_1" cellpadding="0" cellspacing="0">
+                                <tr >
+                                    <th width="40%">手环编号：</th>
+                                    <td width="60%"><input type="text" name="" ms-duplex="addNo"/>
+                                    </td>
+                                </tr>
+                                <tr >
+                                    <th width="40%">手环地址：</th>
+                                    <td width="60%"><input type="text" name="" ms-duplex="addAddr"/>
+                                    </td>
+                                </tr>
+                            </table>
+                            <div class="user-btn">
+                                <input type="button" value="保存" class="oper" ms-click="add"/>
+                                <input type="button" value="返回" class="oper" ms-click="close"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--身高尺弹窗-->
+                <div class="shade"   ms-class="block:pop=='ruler' ">
+                    <div class="user-edit">
+                        <div class="user-main">
+                            <div class="user-title">
+                                <h3>身高尺：</h3>
+                            </div>
+
+                            <table class="table_1" cellpadding="0" cellspacing="0">
+                                <tr ms-if="weight!=2" >
+                                    <th width="40%">集团：</th>
+                                    <td width="60%">
+                                        <select  ms-duplex="addTegr">
+                                            <option ms-attr-value="{{el.tegr_id}}" ms-repeat="tegerList">{{el.tegr_name | addFilter}}</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr >
+                                    <th width="40%">教师：</th>
+                                    <td width="60%">
+                                        <select  ms-duplex="addUser">
+                                            <option ms-attr-value="{{el.user_id}}" ms-repeat="userList">{{el.name}}</option>
+                                        </select>
+                                    </td>
+                                </tr>
+
+                                <tr >
+                                    <th width="40%">身高尺编号：</th>
+                                    <td width="60%"><input type="text" name="" ms-duplex="addNo"/>
+                                    </td>
+                                </tr>
+
+                                <tr >
+                                    <th width="40%">身高尺地址：</th>
+                                    <td width="60%"><input type="text" name="" ms-duplex="addAddr"/>
+                                    </td>
+                                </tr>
+                            </table>
+                            <div class="user-btn">
+                                <input type="button" value="保存" class="oper" ms-click="add"/>
+                                <input type="button" value="返回" class="oper" ms-click="close"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--健康秤弹窗-->
+                <div class="shade"   ms-class="block:pop=='steelyard' ">
+                    <div class="user-edit">
+                        <div class="user-main">
+                            <div class="user-title">
+                                <h3>健康秤：</h3>
+                            </div>
+
+                            <table class="table_1" cellpadding="0" cellspacing="0">
+                                <tr ms-if="weight!=2">
+                                    <th width="40%">集团：</th>
+                                    <td width="60%">
+                                        <select  ms-duplex="addTegr">
+                                            <option ms-attr-value="{{el.tegr_id}}" ms-repeat="tegerList">{{el.tegr_name | addFilter}}</option>
+                                        </select>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <th width="40%">教师：</th>
+                                    <td width="60%">
+                                        <select  ms-duplex="addUser">
+                                            <option ms-attr-value="{{el.user_id}}" ms-repeat="userList">{{el.name}}</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr >
+                                    <th width="40%">健康秤编号：</th>
+                                    <td width="60%"><input type="text" name="" ms-duplex="addNo"/>
+                                    </td>
+                                </tr>
+
+                                <tr >
+                                    <th width="40%">健康秤地址：</th>
+                                    <td width="60%"><input type="text" name="" ms-duplex="addAddr"/>
+                                    </td>
+                                </tr>
+                            </table>
+                            <div class="user-btn">
+                                <input type="button" value="保存" class="oper" ms-click="add"/>
+                                <input type="button" value="返回" class="oper" ms-click="close"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
